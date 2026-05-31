@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoreMind</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div>
+            <strong>CoreMind</strong>
+            <span>Team knowledge assistant</span>
+          </div>
+        </div>
+
+        <nav class="main-nav" aria-label="Sections">
+          <button class="nav-item active" data-view="chat">Chat</button>
+          <button class="nav-item" data-view="knowledge">Knowledge</button>
+          <button class="nav-item" data-view="sources">Data Sources</button>
+          <button class="nav-item" data-view="ingestion">Ingestion</button>
+          <button class="nav-item" data-view="governance">Governance</button>
+        </nav>
+
+        <div class="user-card">
+          <label for="userSelect">Workspace user</label>
+          <select id="userSelect"></select>
+          <p id="userRole"></p>
+        </div>
+
+        <div class="session-header">
+          <span>Recent chats</span>
+          <button class="icon-button" id="newSessionButton" title="New chat" aria-label="New chat">+</button>
+        </div>
+        <div class="session-list" id="sessionList"></div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="viewEyebrow">Assistant</p>
+            <h1 id="viewTitle">Ask anything with trusted sources.</h1>
+          </div>
+          <div class="health-pill" id="healthPill">Checking service</div>
+        </header>
+
+        <section class="view active" id="chatView" aria-label="Chat">
+          <div class="chat-shell">
+            <div class="chat-stream" id="answerPanel">
+              <div class="welcome-card">
+                <h2>How can I help?</h2>
+                <p>Ask a team knowledge question. Add links or scoped sources only when you need them.</p>
+                <div class="quick-actions" id="questionExamples"></div>
+              </div>
+            </div>
+
+            <div class="composer-wrap">
+              <div class="selected-context" id="selectedContext">No external context selected</div>
+              <div class="composer">
+                <button class="plus-button" id="contextMenuButton" aria-expanded="false" aria-controls="contextMenu" title="Add context">+</button>
+                <textarea id="questionInput" rows="1" placeholder="Ask about a config, runbook, release, page, PR, or ticket"></textarea>
+                <button class="send-button" id="askButton">Send</button>
+
+                <div class="context-menu" id="contextMenu" hidden>
+                  <div class="menu-section">
+                    <strong>Answer scope</strong>
+                    <button data-mode="auto" class="mode-option active">Auto</button>
+                    <button data-mode="rag-only" class="mode-option">RAG only</button>
+                    <button data-mode="external-only" class="mode-option">Current context only</button>
+                    <button data-mode="rag-plus-external" class="mode-option">RAG + current context</button>
+                  </div>
+                  <div class="menu-section">
+                    <strong>Add context</strong>
+                    <button data-open-tool="link">Summarize a link</button>
+                    <button data-open-tool="search">Search sources</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="chat-drawer" id="chatDrawer" aria-label="Source drawer">
+            <div class="drawer-tabs">
+              <button class="drawer-tab active" data-drawer="sources">Sources</button>
+              <button class="drawer-tab" data-drawer="activity">Activity</button>
+            </div>
+            <div id="sourceList" class="drawer-panel active"></div>
+            <div id="retrievalTimeline" class="drawer-panel"></div>
+          </aside>
+        </section>
+
+        <section class="view" id="knowledgeView" aria-label="Knowledge management">
+          <div class="management-grid">
+            <article class="management-card wide">
+              <div class="section-heading">
+                <span>Knowledge base</span>
+                <button class="secondary-button">New collection</button>
+              </div>
+              <div class="metric-grid" id="metricGrid"></div>
+              <div class="table-list" id="knowledgeTable"></div>
+            </article>
+
+            <article class="management-card">
+              <div class="section-heading">
+                <span>Content tuning</span>
+              </div>
+              <div class="setting-list">
+                <label><input type="checkbox" checked /> Require citation before answer</label>
+                <label><input type="checkbox" checked /> Warn on stale knowledge</label>
+                <label><input type="checkbox" /> Allow maintainer draft edits</label>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="sourcesView" aria-label="Data source management">
+          <div class="management-grid">
+            <article class="management-card wide">
+              <div class="section-heading">
+                <span>Connected sources</span>
+                <button class="secondary-button">Add source</button>
+              </div>
+              <div class="source-config-grid" id="sourceConfigGrid"></div>
+            </article>
+
+            <article class="management-card">
+              <div class="section-heading">
+                <span>Search preview</span>
+              </div>
+              <div class="search-controls">
+                <select id="platformSelect">
+                  <option value="all">All</option>
+                  <option value="confluence">Confluence</option>
+                  <option value="github">GitHub</option>
+                  <option value="jira">JIRA</option>
+                </select>
+                <input id="searchInput" type="search" placeholder="Search source metadata" />
+                <button id="searchButton">Search</button>
+              </div>
+              <div class="search-note" id="searchNote"></div>
+              <div class="result-list" id="resultList"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="ingestionView" aria-label="Ingestion pipeline">
+          <div class="management-grid">
+            <article class="management-card wide">
+              <div class="section-heading">
+                <span>Ingestion pipeline</span>
+                <button class="secondary-button">Run sync</button>
+              </div>
+              <div class="pipeline-list" id="pipelineList"></div>
+            </article>
+
+            <article class="management-card">
+              <div class="section-heading">
+                <span>Link summary</span>
+              </div>
+              <div class="link-box">
+                <input id="linkInput" type="url" placeholder="Paste Confluence, GitHub, or JIRA URL" />
+                <button id="summarizeButton">Summarize</button>
+              </div>
+              <div class="quick-actions compact" id="linkExamples"></div>
+              <div class="summary-box" id="summaryBox"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="governanceView" aria-label="Governance">
+          <div class="management-grid">
+            <article class="management-card wide">
+              <div class="section-heading">
+                <span>Access and audit</span>
+              </div>
+              <div class="audit-list" id="auditList"></div>
+            </article>
+
+            <article class="management-card">
+              <div class="section-heading">
+                <span>Confluence update preview</span>
+              </div>
+              <textarea id="updateInstruction" rows="4">Update the payment rollout page with a PAY-2481 rollout-window check.</textarea>
+              <button id="previewUpdateButton" class="secondary-button full">Generate preview</button>
+              <div class="update-preview" id="updatePreview"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

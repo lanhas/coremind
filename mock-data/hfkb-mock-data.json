@@ -1,0 +1,111 @@
+{
+  "rag": [
+    {
+      "id": "rag-vpn-troubleshooting",
+      "title": "VPN 排障流程",
+      "body": "当成员反馈 VPN 无法连接时，优先检查账号状态、MFA 状态、客户端版本和本地网络。AUTH-401 通常是账号或 MFA 校验失败；NET-timeout 优先排查本地网络、代理和出口策略。不要在聊天或工单评论中粘贴 VPN token、临时验证码或完整客户端日志。",
+      "owner": "IT Support",
+      "updatedAt": "2026-05-31",
+      "status": "active",
+      "tags": ["vpn", "network", "mfa", "runbook"],
+      "source": {
+        "type": "rag",
+        "title": "VPN 排障流程",
+        "url": "mock://rag/vpn-troubleshooting",
+        "location": "mock-data/knowledge/vpn-troubleshooting.md",
+        "updatedAt": "2026-05-31"
+      }
+    },
+    {
+      "id": "rag-payment-config",
+      "title": "支付服务配置说明",
+      "body": "支付服务核心配置包括 payment.retry.max_attempts、payment.risk.mode 和 payment.callback.timeout_ms。生产环境 payment.retry.max_attempts 默认值为 3，payment.risk.mode 默认值为 strict，payment.callback.timeout_ms 默认值为 3000。变更配置必须经过灰度发布并确认 JIRA 变更单。",
+      "owner": "Payment Platform",
+      "updatedAt": "2026-05-29",
+      "status": "active",
+      "tags": ["payment", "config", "release"],
+      "source": {
+        "type": "rag",
+        "title": "支付服务配置说明",
+        "url": "mock://rag/payment-config",
+        "location": "mock-data/knowledge/payment-config.md",
+        "updatedAt": "2026-05-29"
+      }
+    },
+    {
+      "id": "rag-confluence-update-policy",
+      "title": "Confluence 受控更新策略",
+      "body": "AI 只能辅助生成 Confluence 更新草稿，不能在无权限校验、无差异预览、无用户确认和无审计记录的情况下直接修改页面。允许范围包括本人创建、本人负责维护或页面 owner 授权的低风险文本说明。禁止删除页面、移动页面、修改页面权限、批量修改多人维护页面或覆盖他人刚刚修改过的页面版本。",
+      "owner": "Knowledge Governance",
+      "updatedAt": "2026-05-30",
+      "status": "active",
+      "tags": ["confluence", "permission", "audit"],
+      "source": {
+        "type": "rag",
+        "title": "Confluence 受控更新策略",
+        "url": "mock://rag/confluence-update-policy",
+        "location": "mock-data/knowledge/confluence-update-policy.md",
+        "updatedAt": "2026-05-30"
+      }
+    }
+  ],
+  "external": [
+    {
+      "id": "confluence-payment-rollout",
+      "platform": "confluence",
+      "title": "支付服务 2026-05 灰度发布记录",
+      "url": "https://confluence.example.local/display/PAY/2026-05-payment-rollout",
+      "owner": "Payment Platform",
+      "updatedAt": "2026-05-31",
+      "content": "本次灰度发布将 payment.retry.max_attempts 从 2 调整为 3，并保持 payment.risk.mode=strict。灰度范围为华东一区 10% 流量。回滚条件为支付成功率下降超过 0.5% 或回调 P95 超过 1200ms。",
+      "allowedUsers": ["u-alice", "u-bob"]
+    },
+    {
+      "id": "confluence-vpn-faq",
+      "platform": "confluence",
+      "title": "VPN 常见问题 FAQ",
+      "url": "https://confluence.example.local/display/IT/VPN-FAQ",
+      "owner": "IT Support",
+      "updatedAt": "2026-05-28",
+      "content": "VPN AUTH-401 错误通常与账号锁定、MFA 失败或用户未加入 vpn-users 组有关。NET-timeout 错误通常与本地网络、代理或出口防火墙有关。",
+      "allowedUsers": ["u-alice", "u-bob", "u-carol"]
+    },
+    {
+      "id": "github-payment-readme",
+      "platform": "github",
+      "title": "payment-service README",
+      "url": "https://github.example.local/org/payment-service/blob/main/README.md",
+      "owner": "Payment Platform",
+      "updatedAt": "2026-05-30",
+      "content": "payment-service 负责支付回调、重试和风控模式选择。配置通过 config/payment.yaml 管理，callback timeout 默认 3000ms。发布必须关联 JIRA 变更单。",
+      "allowedUsers": ["u-alice"]
+    },
+    {
+      "id": "github-vpn-client-pr",
+      "platform": "github",
+      "title": "vpn-client PR #128: improve MFA error message",
+      "url": "https://github.example.local/org/vpn-client/pull/128",
+      "owner": "IT Support",
+      "updatedAt": "2026-05-27",
+      "content": "PR #128 将 AUTH-401 的错误提示改为请检查账号状态和 MFA 推送，并在客户端日志中增加 request_id，方便排障。",
+      "allowedUsers": ["u-alice", "u-carol"]
+    }
+  ],
+  "users": [
+    {
+      "id": "u-alice",
+      "name": "Alice",
+      "roles": ["member", "knowledge-maintainer"]
+    },
+    {
+      "id": "u-bob",
+      "name": "Bob",
+      "roles": ["member"]
+    },
+    {
+      "id": "u-carol",
+      "name": "Carol",
+      "roles": ["member"]
+    }
+  ]
+}
